@@ -1,0 +1,91 @@
+{
+    "common": {
+        "appName": "UAE Digital Identity",
+        "next": "Continue",
+        "back": "Back",
+        "submit": "Submit",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "retry": "Try Again",
+        "cancel": "Cancel",
+        "step": "Step {{current}} of {{total}}"
+    },
+    "signup": {
+        "landing": {
+            "title": "Your Digital Identity",
+            "subtitle": "Secure. Verified. Trusted.",
+            "description": "Create your UAE Digital Identity account to access government and private services with a single, secure login.",
+            "cta": "Create Your Account",
+            "signin": "Already have an account? Sign in",
+            "features": {
+                "security": {
+                    "title": "Bank-Grade Security",
+                    "description": "Your identity is protected with military-grade encryption and multi-factor authentication."
+                },
+                "access": {
+                    "title": "Universal Access",
+                    "description": "One identity for all UAE government and private sector digital services."
+                },
+                "privacy": {
+                    "title": "Privacy First",
+                    "description": "You control your data. Share only what's needed, when it's needed."
+                }
+            }
+        },
+        "terms": {
+            "title": "Terms & Conditions",
+            "subtitle": "Please review and accept the terms to continue",
+            "accept": "I accept the Terms & Conditions and Privacy Policy",
+            "continue": "Continue"
+        },
+        "idEntry": {
+            "title": "Identity Verification",
+            "subtitle": "Enter your Emirates ID details",
+            "emiratesId": "Emirates ID Number",
+            "emiratesIdPlaceholder": "784-YYYY-NNNNNNN-C",
+            "emiratesIdHint": "Format: 784-YYYY-NNNNNNN-C",
+            "fullName": "Full Name (as on Emirates ID)",
+            "fullNamePlaceholder": "Enter your full name"
+        },
+        "contact": {
+            "title": "Contact Information",
+            "subtitle": "We'll use this to verify your identity",
+            "phone": "Mobile Number",
+            "phonePlaceholder": "+971 5X XXX XXXX",
+            "email": "Email Address",
+            "emailPlaceholder": "your.email@example.com",
+            "gender": "Gender",
+            "genderMale": "Male",
+            "genderFemale": "Female"
+        },
+        "otp": {
+            "title": "Verify Your Identity",
+            "subtitle": "Enter the 6-digit code sent to your mobile",
+            "resend": "Resend Code",
+            "resendIn": "Resend in {{seconds}}s",
+            "expired": "Code expired. Please request a new one.",
+            "invalid": "Invalid code. Please try again.",
+            "maxAttempts": "Too many attempts. Please try again later."
+        },
+        "pin": {
+            "title": "Create Your PIN",
+            "subtitle": "Set a 6-digit PIN for secure access",
+            "create": "Enter PIN",
+            "confirm": "Confirm PIN",
+            "mismatch": "PINs do not match",
+            "rules": {
+                "title": "PIN Requirements",
+                "length": "Must be 6 digits",
+                "noSequential": "No sequential numbers (123456)",
+                "noRepeated": "No repeated digits (111111)",
+                "noCommon": "No common patterns"
+            }
+        },
+        "success": {
+            "title": "Account Created!",
+            "subtitle": "Your UAE Digital Identity is ready",
+            "description": "You can now use your account to sign in to government and private services across the UAE.",
+            "cta": "Sign In Now"
+        }
+    }
+}
