@@ -80,15 +80,15 @@ public class JwkRotationScheduler {
 
                         if (expiry.isBefore(now)) {
                             log.error("JWT key '{}' has EXPIRED at {}. Immediate rotation required!", alias, expiry);
-                            auditService.logEvent(AuditEventType.KEY_ROTATION_NEEDED, null, null,
-                                Map.of("alias", alias, "status", "EXPIRED", "expiry", expiry.toString()));
+                            auditService.logEvent(AuditEventType.KEY_ROTATION_NEEDED, null, (String) null,
+                                    Map.of("alias", alias, "status", "EXPIRED", "expiry", expiry.toString()));
                         } else if (expiry.isBefore(warningThreshold)) {
                             long daysUntilExpiry = ChronoUnit.DAYS.between(now, expiry);
                             log.warn("JWT key '{}' expires in {} days ({}). Rotation recommended.",
-                                alias, daysUntilExpiry, expiry);
-                            auditService.logEvent(AuditEventType.KEY_ROTATION_NEEDED, null, null,
-                                Map.of("alias", alias, "status", "EXPIRING_SOON",
-                                       "daysUntilExpiry", String.valueOf(daysUntilExpiry)));
+                                    alias, daysUntilExpiry, expiry);
+                            auditService.logEvent(AuditEventType.KEY_ROTATION_NEEDED, null, (String) null,
+                                    Map.of("alias", alias, "status", "EXPIRING_SOON",
+                                            "daysUntilExpiry", String.valueOf(daysUntilExpiry)));
 
                             // Notify secrets provider for auto-rotation (Vault/KMS)
                             secretsProvider.rotateKey(alias);

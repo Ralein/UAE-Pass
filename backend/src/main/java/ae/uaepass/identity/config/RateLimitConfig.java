@@ -2,7 +2,6 @@ package ae.uaepass.identity.config;
 
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
-import io.github.bucket4j.Refill;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,10 +42,9 @@ public class RateLimitConfig {
         FilterRegistrationBean<RateLimitFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(new RateLimitFilter());
         registration.addUrlPatterns(
-            "/oauth2/authorize", "/oauth2/token",
-            "/api/v1/otp/*", "/api/v1/registration/*",
-            "/api/v1/pin/*", "/api/v1/sessions/*"
-        );
+                "/oauth2/authorize", "/oauth2/token",
+                "/api/v1/otp/*", "/api/v1/registration/*",
+                "/api/v1/pin/*", "/api/v1/sessions/*");
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registration;
     }
@@ -91,8 +89,7 @@ public class RateLimitConfig {
             response.setContentType("application/json");
             response.setHeader("Retry-After", "60");
             response.getWriter().write(
-                "{\"error\":\"rate_limit_exceeded\",\"message\":\"Too many requests. Please try again later.\"}"
-            );
+                    "{\"error\":\"rate_limit_exceeded\",\"message\":\"Too many requests. Please try again later.\"}");
         }
 
         private String resolveClientIp(HttpServletRequest request) {
@@ -108,34 +105,41 @@ public class RateLimitConfig {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 Object uid = session.getAttribute("userId");
-                if (uid != null) return uid.toString();
+                if (uid != null)
+                    return uid.toString();
             }
             // JWT subject would be extracted via SecurityContextHolder in full auth flow
             return null;
         }
 
         private String resolveBucketGroup(String path) {
-            if (path.startsWith("/oauth2/authorize")) return "authorize";
-            if (path.startsWith("/oauth2/token")) return "token";
-            if (path.startsWith("/api/v1/otp")) return "otp";
-            if (path.startsWith("/api/v1/registration")) return "registration";
-            if (path.startsWith("/api/v1/pin")) return "pin";
-            if (path.startsWith("/api/v1/sessions")) return "sessions";
+            if (path.startsWith("/oauth2/authorize"))
+                return "authorize";
+            if (path.startsWith("/oauth2/token"))
+                return "token";
+            if (path.startsWith("/api/v1/otp"))
+                return "otp";
+            if (path.startsWith("/api/v1/registration"))
+                return "registration";
+            if (path.startsWith("/api/v1/pin"))
+                return "pin";
+            if (path.startsWith("/api/v1/sessions"))
+                return "sessions";
             return null;
         }
 
         private Bucket resolveIpBucket(String group, String clientIp) {
             String key = group + ":ip:" + clientIp;
             return ipBuckets
-                .computeIfAbsent(group, g -> new ConcurrentHashMap<>())
-                .computeIfAbsent(key, k -> createBucket(group));
+                    .computeIfAbsent(group, g -> new ConcurrentHashMap<>())
+                    .computeIfAbsent(key, k -> createBucket(group));
         }
 
         private Bucket resolveUserBucket(String group, String userId) {
             String key = group + ":user:" + userId;
             return userBuckets
-                .computeIfAbsent(group, g -> new ConcurrentHashMap<>())
-                .computeIfAbsent(key, k -> createUserBucket(group));
+                    .computeIfAbsent(group, g -> new ConcurrentHashMap<>())
+                    .computeIfAbsent(key, k -> createUserBucket(group));
         }
 
         private Bucket createBucket(String group) {
@@ -150,28 +154,27 @@ public class RateLimitConfig {
                 default -> 60;
             };
 
-            Bandwidth limit = Bandwidth.classic(
-                perMinute,
-                Refill.greedy(perMinute, Duration.ofMinutes(1))
-            );
+            Bandwidth limit = Bandwidth.builder()
+                    .capacity(perMinute)
+                    .refillGreedy(perMinute, Duration.ofMinutes(1))
+                    .build();
             return Bucket.builder().addLimit(limit).build();
         }
 
         private Bucket createUserBucket(String group) {
             // Per-user limits are stricter than per-IP
             int perMinute = switch (group) {
-                case "otp" -> 3;    // 3 OTP requests per user per minute
-                case "pin" -> 3;    // 3 PIN attempts per user per minute
-                case "token" -> 5;  // 5 token requests per user per minute
+                case "otp" -> 3; // 3 OTP requests per user per minute
+                case "pin" -> 3; // 3 PIN attempts per user per minute
+                case "token" -> 5; // 5 token requests per user per minute
                 default -> 10;
             };
 
-            Bandwidth limit = Bandwidth.classic(
-                perMinute,
-                Refill.greedy(perMinute, Duration.ofMinutes(1))
-            );
+            Bandwidth limit = Bandwidth.builder()
+                    .capacity(perMinute)
+                    .refillGreedy(perMinute, Duration.ofMinutes(1))
+                    .build();
             return Bucket.builder().addLimit(limit).build();
         }
     }
 }
-
